@@ -1,0 +1,161 @@
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: rgb(73, 223, 140);
+}
+
+h1 {
+    font-family: Comic Sans MS;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#score {
+    position: absolute;
+    font-family: Comic Sans MS;
+    font-size: 30px;
+    top: -63;
+    display: flex;
+    justify-content: center;
+}
+
+#game {
+    
+    margin: auto;
+    width: 720px;
+    height: 720px;
+    border: 5px solid rgb(12, 90, 45);
+    background-color: rgb(29, 133, 29);
+   
+    position: relative;
+    user-select: none;
+}
+
+.grid-container {
+    user-select: none;
+    display: grid;
+    position: absolute;
+    
+    grid-template-columns: repeat(9, 80px);
+    grid-template-rows: repeat(9, 80px);
+}
+
+#grid-item {
+    border: 1px solid rgb(93, 190, 68);
+    border-radius: 7%;
+    background-color: rgb(150, 230, 150);
+}
+
+#start-screen {
+    position: absolute;
+    font-size: 50px;
+    font-family: Comic Sans MS;
+    left: 85px;
+    top: 160px;
+}
+
+#lose-message {
+    color: rgb(133, 13, 13);
+    font-size: 70px;
+    font-family: bold;
+    left: 50%;
+    top: 72%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    
+}
+    
+
+#stickman {
+    top: 325px;
+    left: 335px;
+    position: absolute;
+    height: 70px;
+    width: 50px;
+}
+
+#rock1 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock2 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock3 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock4 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock5 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock6 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock7 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock8 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock9 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+#rock10 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#shadow {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background-color: rgb(8, 8, 8, 60%);
+    position: absolute;
+}
