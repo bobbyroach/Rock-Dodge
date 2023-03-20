@@ -10,3 +10,7 @@ There is still much to be improved on in this game and as I learn more I hope to
 Here's a short clip of the gameplay:
 
 https://user-images.githubusercontent.com/110302904/210627677-dab2270c-b3a9-40d0-990a-51b9112b999c.mp4
+
+
+## To Play:
+
