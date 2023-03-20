@@ -14,3 +14,7 @@ https://user-images.githubusercontent.com/110302904/210627677-dab2270c-b3a9-40d0
 
 ## To Play:
 
+1. Put all 4 files of code and the images folder into microsoft visual studio into one folder. 
+2. Inside Microsoft Visual Studio, install the extension "live server", by Ritwick Dey.
+3. Then, inside the folder, click "go live" at the bottom right of the application.
+4. The game should open up on a local browser and be ready for play.
