@@ -10,7 +10,7 @@ body {
 
 h1 {
     font-family: Comic Sans MS;
-    margin: 20px;
+    margin: 15px;
     display: flex;
     justify-content: center;
 }
@@ -27,6 +27,7 @@ h1 {
 #game {
     
     margin: auto;
+
     width: 720px;
     height: 720px;
     border: 5px solid rgb(12, 90, 45);
@@ -150,12 +151,76 @@ h1 {
     position: absolute;
 }
 
+#rock11 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#rock12 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#rock13 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#rock14 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#rock15 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#rock16 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#rock17 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
+#rock18 {
+    top: -1000px;
+    left: 0px;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+}
+
 #shadow {
     top: -1000px;
     left: 0px;
     height: 60px;
     width: 60px;
     border-radius: 50%;
-    background-color: rgb(8, 8, 8, 60%);
+    background-color: rgba(8, 8, 8, 0.308);
     position: absolute;
 }
