@@ -1,7 +1,5 @@
-import { setupRocks, hideRocks, isRockNearBottom1,
-    isRockNearBottom2, isRockNearBottom3, isRockNearBottom4, isRockNearBottom5,
-    isRockNearBottom6, isRockNearBottom7, isRockNearBottom8, isRockNearBottom9,
-    isRockNearBottom10, getScore, resetScore } from './rocks.js'
+import { hideRocks, isRockNearBottom, getScore, resetScore, startWithRocks, 
+        increaseDifficulty } from './rocks.js'
 
 
 const stickmanElem = document.querySelector('[data-stickman]')
@@ -14,126 +12,214 @@ const scoreElem = document.querySelector('[data-score]')
 
 let interval
 let isMoving = false
-let counter = 0
-let SPEED
-let score = 0
+let counter
+let isLost = false
+let ROCKNUM = 10
+let MAXROCKNUM = 18
 
 
 
 
-function moveLeft(){
-    var left = parseInt(window.getComputedStyle(stickman).getPropertyValue("left"))
-    stickman.style.left = left - 2 + "px"
-    counter += 2
 
-    if(left<=15){
-        stickman.style.left = 15 + "px"
-    }
-    if (counter == 80) {
-        clearInterval(interval)
-        isMoving = false
-        counter = 0
-    }
-}
-function moveRight(){
-    var left = parseInt(window.getComputedStyle(stickman).getPropertyValue("left"))
-    stickman.style.left = left + 2 + "px"
-    counter += 2
-
-    if(left>=655){
-        stickman.style.left = 655 + "px"
-    }
-    if (counter == 80) {
-        clearInterval(interval)
-        isMoving = false
-        counter = 0
-    }
-}
-function moveUp(){
-    var top = parseInt(window.getComputedStyle(stickman).getPropertyValue("top"))
-    stickman.style.top = top - 2 + "px"
-    counter += 2
-    if(top<=5){
-        stickman.style.top = 5 + "px"
-    }
-    if (counter == 80) {
-        clearInterval(interval)
-        isMoving = false
-        counter = 0
-    }
-}
-function moveDown(){
-    var top = parseInt(window.getComputedStyle(stickman).getPropertyValue("top"))
-    stickman.style.top = top + 2 + "px"
-    counter += 2
-
-    if(top >= 645){
-        stickman.style.top = 645 + "px"
-    }
-    if (counter == 80) {
-        clearInterval(interval)
-        isMoving = false
-        counter = 0
-    }
-}
-
-function keyPressed(event) {
-    if (isMoving) return
-    
-        if(event.key==="ArrowLeft" || event.key==="a"){
-            interval = setInterval(moveLeft, 1)
-            isMoving = true
-        }
-        if(event.key==="ArrowRight" || event.key==="d"){
-            interval = setInterval(moveRight, 1)
-            isMoving = true
-        }
-        if(event.key==="ArrowUp" || event.key==="w"){
-            interval = setInterval(moveUp, 1)
-            isMoving = true
-        }
-        if(event.key==="ArrowDown" || event.key==="s"){
-            interval = setInterval(moveDown, 1)
-            isMoving = true
-        }
-};
-
-//creates grid
+/* creates grid */
 for (let i = 0; i < 9; i++) {
     for (let x = 0; x < 9; x++) {
         var item = document.createElement("div")
-        //item.setAttribute("style", "grid-area:" + i + " / " + x + " / " + i + " / " + x);
         item.setAttribute("grid-column", x + " / span 1")
         item.setAttribute("grid-row", i + " / span 1")
         item.setAttribute("id", "grid-item")
         grid.appendChild(item)
-
     }
 }
 
 
+
 window.addEventListener("keydown", handleStart, { once: true })
 
+/**
+ * Handles the start of the game.
+ */
 function handleStart() {
     document.addEventListener("keydown", keyPressed)
+
+    startWithRocks(ROCKNUM)
     stickmanElem.style.top = 325
     stickmanElem.style.left = 335
-    setupRocks()
-    checkLose()
+    inGame()
+    
+    isLost = false
     isMoving = false
     counter = 0
     startScreenElem.style.display = 'none'
     loseMessageElem.style.display = 'none'
+    checkLose()
+}
 
+
+
+/* Handles functions for mid-game */
+function inGame() {
+    let levelOne = false
+    let levelTwo = false
+    let levelThree = false 
+    let levelFour = false
     
+    var activeGameInterval = setInterval(() => {
+        
+        if (gameOver()) {
+            clearInterval(activeGameInterval)
+        }
+
+        if (getScore() == 100) {
+            if (!(levelOne)) {
+                levelOne = true
+                setTimeout(function() {
+                    increaseDifficulty()
+                }, 10)
+            }
+        }
+
+        if (getScore() == 256) {
+            if (!(levelTwo)) {
+                levelTwo = true 
+                setTimeout(function() {
+                    increaseDifficulty()
+                }, 10)
+            }
+        }
+
+        if (getScore() == 508) {
+            if (!(levelThree)) {
+                levelThree = true 
+                setTimeout(function() {
+                    increaseDifficulty()
+                }, 10)
+            }
+        }
+
+        if (getScore() == 812) {
+            if (!(levelFour)) {
+                levelFour = true 
+                setTimeout(function() {
+                    increaseDifficulty()
+                }, 10)
+            }
+        }
+        
+    }, 10)
+
 }
 
-function getStickmanRect() {
-    return stickmanElem.getBoundingClientRect()
+
+
+
+
+
+
+
+
+
+/**
+ * Given a string representing a direction, moves the player in that direction 
+ * by one tile, not allowing another move until the first is completed.
+ * 
+ * @param { String } dir 
+ */
+function move(dir) {
+    
+    isMoving = true
+    var left = parseInt(window.getComputedStyle(stickman).getPropertyValue("left"))
+    var top = parseInt(window.getComputedStyle(stickman).getPropertyValue("top"))
+    
+    if (dir == 'left') {
+        stickman.style.left = left - 2 + "px"
+    } else if (dir == 'right') {
+        stickman.style.left = left + 2 + "px"
+    } else if (dir == 'up') {
+        stickman.style.top = top - 2 + "px"
+    } else if (dir == 'down') {
+        stickman.style.top = top + 2 + "px"
+    } 
+
+    counter += 2
+    if (top <= 5 && dir == 'up') {
+        stickman.style.top = 5 + "px"
+    } if (top >= 645 && dir == 'down') {
+        stickman.style.top = 645 + "px"
+    } if (left >= 655 && dir == 'right'){
+        stickman.style.left = 655 + "px"
+    } if (left <= 15 && dir == 'left'){
+        stickman.style.left = 15 + "px"
+    }
+
+    if (counter == 80) {
+        clearInterval(interval)
+        isMoving = false
+        counter = 0
+    }
 }
 
-function getRockRects(rock) {
-    return rock.getBoundingClientRect()
+/**
+ * Handles the keys typed to move the character.
+ * 
+ * @param { Event } event 
+ * @returns String 
+ */
+function keyPressed(event) {
+    if (isMoving) return
+    
+        if (event.key == "ArrowLeft" || event.key == "a"){
+            interval = setInterval(() => {
+                move('left')
+            }, 1)
+        }
+        else if (event.key == "ArrowRight" || event.key == "d"){
+            interval = setInterval(() => {
+                move('right')
+            }, 1)
+        }
+        else if (event.key == "ArrowUp" || event.key == "w"){
+            interval = setInterval(() => {
+                move('up')
+            }, 1)
+        }
+        else if (event.key == "ArrowDown" || event.key == "s"){
+            interval = setInterval(() => {
+                move('down')
+            }, 1)
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Constantly checks if player is in contact with a rock that's near its intended
+ * tile.
+ */
+function checkLose() {
+    let rectArr = []
+
+    setInterval(() => {
+        const stickmanRect = stickmanElem.getBoundingClientRect()
+
+        for (let i = 0; i < MAXROCKNUM; i++) {
+            rectArr[i] = rockElems[i].getBoundingClientRect()
+        }
+        for (let k = 0; k < MAXROCKNUM; k++) {
+            if (isCollision(rectArr[k], stickmanRect) && isRockNearBottom(k)) {
+                handleLose()
+            }
+        }
+    }, 1)
 }
   
 function isCollision(rect1, rect2) {
@@ -141,63 +227,38 @@ function isCollision(rect1, rect2) {
         rect1.right > rect2.left && rect1.bottom > rect2.top
 }
 
-function checkLose() {
-    setInterval(() => {
-        const stickmanRect = getStickmanRect()
-        const rect1 = getRockRects(rockElems[0])
-        const rect2 = getRockRects(rockElems[1])
-        const rect3 = getRockRects(rockElems[2])
-        const rect4 = getRockRects(rockElems[3])
-        const rect5 = getRockRects(rockElems[4])
-        const rect6 = getRockRects(rockElems[5])
-        const rect7 = getRockRects(rockElems[6])
-        const rect8 = getRockRects(rockElems[7])
-        const rect9 = getRockRects(rockElems[8])
-        const rect10 = getRockRects(rockElems[9])
-        
-        if (isCollision(rect1, stickmanRect) && isRockNearBottom1())
-            handleLose()
-        if (isCollision(rect2, stickmanRect) && isRockNearBottom2())
-            handleLose()
-        if (isCollision(rect3, stickmanRect) && isRockNearBottom3())
-            handleLose()
-        if (isCollision(rect4, stickmanRect) && isRockNearBottom4())
-            handleLose()
-        if (isCollision(rect5, stickmanRect) && isRockNearBottom5())
-            handleLose()
-        if (isCollision(rect6, stickmanRect) && isRockNearBottom6())
-            handleLose()
-        if (isCollision(rect7, stickmanRect) && isRockNearBottom7())
-            handleLose()
-        if (isCollision(rect8, stickmanRect) && isRockNearBottom8())
-            handleLose()
-        if (isCollision(rect9, stickmanRect) && isRockNearBottom9())
-            handleLose()
-        if (isCollision(rect10, stickmanRect) && isRockNearBottom10())
-            handleLose()
-    })
-}
 
+
+
+/**
+ * Handles the state of the game when the player has lost.
+ */
 function handleLose() {
     document.removeEventListener('keydown', keyPressed)
     hideRocks()
     isMoving = true
     stickmanElem.style.top = 325
     stickmanElem.style.left = 335
-    showScore()
- 
+    
+    /* Displays the final score */
+    scoreElem.style.fontSize = 50
+    scoreElem.style.top = 155
+    scoreElem.style.left = 250
+
+    isLost = true
     loseMessageElem.style.display = null
 
-    setTimeout(() => {
+    /* Prevents player from moving when game is ended */
+    var counter = 0
+    var xx = setInterval(() => {
         stickmanElem.style.top = 325
         stickmanElem.style.left = 335
-        
-    }, 500)
-    setTimeout(() => {
-        stickmanElem.style.top = 325
-        stickmanElem.style.left = 335
+        counter += 1
+        if (counter >= 400) {
+            clearInterval(xx)
+        }
+    }, 5)
 
-    }, 1000)
     setTimeout(() => {
         startScreenElem.style.display = null
         loseMessageElem.style.display = 'none'
@@ -206,43 +267,24 @@ function handleLose() {
     }, 1500)
 }
 
+
+
+
+
+
 function scoreTracker() {
-        return score = getScore()
+    return getScore()
 }
 
+export function gameOver() {
+    return isLost
+}
+
+// Constantly updates the score of the game
 setInterval(() => {
     document.getElementById('score').innerHTML = 'score: ' + scoreTracker()
 }, 10)
 
-
-export function increaseSpeed() {
-    if (score >= 1300)
-        return 7
-    else if (score >= 1000)
-        return 6.5
-    else if (score >= 700)
-        return 6
-    else if (score >= 588)
-        return 5.5
-    else if (score >= 507)
-        return 5
-    else if (score >= 426)
-        return 4.5
-    else if (score >= 365)
-        return 4.25
-    else if (score >= 304)
-        return 4
-    else if (score >= 243)
-        return 3.75
-    else if (score >= 162)
-        return 3.5
-    if (score >= 81)
-        return 3.25
-    else return 3
-}
-
-function showScore() {
-    scoreElem.style.fontSize = 50
-    scoreElem.style.top = 155
-    scoreElem.style.left = 250
+export function maxRockNum() {
+    return MAXROCKNUM
 }
